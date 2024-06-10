@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Clasificador de Anemia</title>
+    <script>
+        function clasificarAnemia(event) {
+            event.preventDefault();
+            const WBC = document.getElementById('WBC').value;
+            const RBC = document.getElementById('RBC').value;
+            const HGB = document.getElementById('HGB').value;
+            const MCV = document.getElementById('MCV').value;
+            const MCHC = document.getElementById('MCHC').value;
+            const PLT = document.getElementById('PLT').value;
+            const PCT = document.getElementById('PCT').value;
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `WBC=${WBC}&RBC=${RBC}&HGB=${HGB}&MCV=${MCV}&MCHC=${MCHC}&PLT=${PLT}&PCT=${PCT}`,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('resultado').innerText = 'Error: ' + data.error;
+                    } else {
+                        document.getElementById('resultado').innerText = 'El resultado de la clasificación es: ' + data.class;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('resultado').innerText = 'Error en la solicitud.';
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Clasificador de Anemia</h1>
+    <form id="formulario" onsubmit="clasificarAnemia(event)">
+        <label for="WBC">Recuento de glóbulos blancos (WBC):</label>
+        <input type="text" id="WBC" name="WBC"><br><br>
+        <label for="RBC">Recuento de glóbulos rojos (RBC):</label>
+        <input type="text" id="RBC" name="RBC"><br><br>
+        <label for="HGB">Hemoglobina (HGB):</label>
+        <input type="text" id="HGB" name="HGB"><br><br>
+        <label for="MCV">Volumen corpuscular medio (MCV):</label>
+        <input type="text" id="MCV" name="MCV"><br><br>
+        <label for="MCHC">Concentración de hemoglobina corpuscular media (MCHC):</label>
+        <input type="text" id="MCHC" name="MCHC"><br><br>
+        <label for="PLT">Recuento de plaquetas (PLT):</label>
+        <input type="text" id="PLT" name="PLT"><br><br>
+        <label for="PCT">Porcentaje de plaquetas (PCT):</label>
+        <input type="text" id="PCT" name="PCT"><br><br>
+        <input type="submit" value="Enviar">
+    </form>
+    <p id="resultado"></p>
+</body>
+
+</html>

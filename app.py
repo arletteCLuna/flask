@@ -1,7 +1,9 @@
 from flask import Flask, request, render_template, jsonify
-import joblib
 import pandas as pd
+import joblib
 import logging
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
 app = Flask(__name__)
 
@@ -14,7 +16,7 @@ app.logger.debug('Modelo cargado correctamente.')
 
 @app.route('/')
 def home():
-    return render_template('formulario.html')
+    return render_template('formulario1.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
