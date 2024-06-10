@@ -65,7 +65,7 @@ def predict():
         prediction = model.predict(data_df)
         app.logger.debug(f'Predicción: {prediction[0]}')
 
-                # Devolver las predicciones como respuesta JSON
+        # Devolver las predicciones como respuesta JSON
         return jsonify({'Diagnosis': prediction[0]})
     except Exception as e:
         app.logger.error(f'Error en la predicción: {str(e)}')

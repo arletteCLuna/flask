@@ -26,7 +26,7 @@
                     if (data.error) {
                         document.getElementById('resultado').innerText = 'Error: ' + data.error;
                     } else {
-                        document.getElementById('resultado').innerText = 'El resultado de la clasificación es: ' + data.class;
+                        document.getElementById('resultado').innerText = 'El resultado de la clasificación es: ' + data.Diagnosis;
                     }
                 })
                 .catch(error => {
