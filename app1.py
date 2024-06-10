@@ -11,30 +11,11 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 # Cargar el modelo entrenado
-model = joblib.load('modelo1.pkl')
-app.logger.debug('Modelo cargado correctamente.')
-# Intentar cargar datos desde el CSV
 try:
-    data = pd.read_csv(model)
-    app.logger.debug('Datos cargados correctamente.')
+    model = joblib.load('modelo1.pkl')
+    app.logger.debug('Modelo cargado correctamente.')
 except FileNotFoundError as e:
-    app.logger.error(f'Error al cargar los datos: {str(e)}')
-    data = None
-
-# Verifica que los datos fueron cargados correctamente
-if data is not None:
-    # Separar las características y la etiqueta
-    X = data.drop('class', axis=1)
-    y = data['class']
-    
-    # Dividir los datos en conjuntos de entrenamiento y prueba
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
-    # Entrenar el modelo
-    model = RandomForestClassifier()
-    model.fit(X_train, y_train)
-    app.logger.debug('Modelo entrenado correctamente.')
-else:
+    app.logger.error(f'Error al cargar el modelo: {str(e)}')
     model = None
 
 @app.route('/')
@@ -70,6 +51,6 @@ def predict():
     except Exception as e:
         app.logger.error(f'Error en la predicción: {str(e)}')
         return jsonify({'error': str(e)}), 400
-       
+
 if __name__ == '__main__':
     app.run(debug=True)
